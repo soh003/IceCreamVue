@@ -1,12 +1,12 @@
 const app = Vue.createApp({
     data(){
         return{
-            intro:'Participants',
-            participants: [],
-            newParticipant:{
+            intro:'IceCream ',
+            iceCreams: [],
+            newIceCream:{
             name:'',
-            age: null,
-            country: '',
+            price: null,
+            howMany:null,
             },  
             
             
@@ -15,21 +15,21 @@ const app = Vue.createApp({
     }, 
     methods: {
         addMethod(){
-            const newParticipant = {
-                name: this.newParticipant.name,
-                age: this.newParticipant.age,
-                country: this.newParticipant.country,
+            const newIceCream = {
+                name: this.newIceCream.name,
+                price: this.newIceCream.price,
+                howMany: this.newIceCream.howMany,
                 
             };
 
-            axios.post('http://localhost:5071/api/Participants', newParticipant)
+            axios.post('https://icecreamrest.azurewebsites.net/api/Icecreams', newIceCream)
             .then(Response=>{
-                console.log('Participant added', Response.data);
+                console.log('IceCream added', Response.data);
 
             //Opdaterer tabellen
             this.getAll();
             //Ryd inputfelter    
-            this.newParticipant = { name: '', age: '', country: '' };
+            this.newIceCream = { name: '', price: '', howMany: '' };
 
                 
             })
@@ -38,9 +38,9 @@ const app = Vue.createApp({
             })
         },
         getAll(){
-            axios.get('http://localhost:5071/api/Participants')
+            axios.get('https://icecreamrest.azurewebsites.net/api/Icecreams')
             .then(Response=>{
-                this.participants=Response.data;
+                this.iceCreams=Response.data;
             })
             .catch(
                 error=>{
@@ -48,25 +48,25 @@ const app = Vue.createApp({
                 }
             )
         },
-        deleteMethod(participantId) {
-            axios.delete(`http://localhost:5071/api/Participants/${participantId}`)
+        deleteMethod(IceCreamId) {
+            axios.delete(`https://icecreamrest.azurewebsites.net/api/Icecreams/${IceCreamId}`)
                 .then(() => {
-                    // Fjern deltageren lokalt fra listen
-                    this.participants = this.participants.filter(p => p.id !== participantId);
+                    // Fjern is lokalt fra listen
+                    this.iceCreams = this.iceCreams.filter(x => x.id !== IceCreamId);
                     
                 })
                 .catch(error => {
-                    console.error('Error deleting participant:', error);
+                    console.error('Error deleting IceCream:', error);
                 }
             );
         },
-        sortByAge(order) {
+        sortByPrice(order) {
             if (order === 'asc') {
                 // Sorter stigende (lav til høj)
-                this.participants.sort((a, b) => a.age - b.age);
+                this.iceCreams.sort((a, b) => a.price - b.price);
             } else if (order === 'desc') {
                 // Sorter faldende (høj til lav)
-                this.participants.sort((a, b) => b.age - a.age);
+                this.iceCreams.sort((a, b) => b.price - a.price);
             }
         },
         
